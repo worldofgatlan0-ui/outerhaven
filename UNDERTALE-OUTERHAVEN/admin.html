@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - UNDERTALE: OUTERHAVEN</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        .admin-login {
+            max-width: 500px;
+            margin: auto;
+            padding: 120px 30px;
+        }
+
+        .admin-box {
+            background: #111118;
+            border: 1px solid #292934;
+            padding: 35px;
+        }
+
+        .admin-box h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .admin-box > p {
+            color: #9999a6;
+            margin-bottom: 30px;
+        }
+
+        .admin-field {
+            margin-bottom: 20px;
+        }
+
+        .admin-field label {
+            display: block;
+            color: #9999a6;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .admin-field input {
+            width: 100%;
+            padding: 13px;
+            background: #0b0b0f;
+            color: #ffffff;
+            border: 1px solid #292934;
+            font-family: "Space Mono", monospace;
+            outline: none;
+        }
+
+        .admin-field input:focus {
+            border-color: #ffffff;
+        }
+
+        .admin-login-button {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .admin-error {
+            display: none;
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #555563;
+            color: #ffffff;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-content">
+
+        <div class="logo">
+            <span class="logo-main">OUTERHAVEN</span>
+            <span class="logo-sub">ADMINISTRATION</span>
+        </div>
+
+        <nav class="navigation">
+            <a href="index.html">RETURN HOME</a>
+        </nav>
+
+    </div>
+</header>
+
+<main>
+
+<section class="admin-login">
+
+    <div class="admin-box">
+
+        <p class="eyebrow">RESTRICTED ACCESS</p>
+
+        <h1>ADMIN LOGIN</h1>
+
+        <p>
+            Sign in to manage the Outerhaven website.
+        </p>
+
+        <form id="login-form">
+
+            <div class="admin-field">
+
+                <label for="email">EMAIL</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                    autocomplete="username"
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="password">PASSWORD</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    required
+                    autocomplete="current-password"
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="button primary admin-login-button"
+            >
+                LOG IN
+            </button>
+
+        </form>
+
+        <div
+            id="login-error"
+            class="admin-error"
+        ></div>
+
+    </div>
+
+</section>
+
+</main>
+
+<footer class="site-footer">
+
+    <p>UNDERTALE: OUTERHAVEN OFFICIAL</p>
+
+    <p class="footer-small">
+        A fan-made project created by the Outerhaven community.
+    </p>
+
+</footer>
+
+<script src="supabase.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>
+

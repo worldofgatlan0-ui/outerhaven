@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+ 
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Rules - UNDERTALE: OUTERHAVEN OFFICIAL
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ 
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+ 
+<div class="header-content">
+
+    <div class="logo">
+
+        <span class="logo-main">
+            OUTERHAVEN
+        </span>
+
+        <span class="logo-sub">
+            UNDERTALE FAN PROJECT
+        </span>
+
+    </div>
+
+
+<nav class="navigation">
+            <a href="index.html" class="active">HOME</a>
+            <a href="rules.html">RULES</a>
+            <a href="teams.html">OUR TEAM</a>
+            <a href="projects.html">OUR PROJECTS</a>
+            <a href="store.html">STORE</a>
+            <a href="login.html">LOGIN</a>
+        </nav>
+
+</div>
+ 
+
+</header>
+
+<main>
+
+<section class="page-hero">
+
+ 
+<p class="eyebrow">
+    COMMUNITY GUIDELINES
+</p>
+
+<h1>
+    SERVER <span>RULES</span>
+</h1>
+
+<p>
+    Our guidelines for keeping the Outerhaven community friendly,
+    creative, and welcoming.
+</p>
+ 
+
+</section>
+
+<section
+    class="content-section"
+    id="rules-list"
+>
+
+ 
+<div class="empty-message">
+    LOADING RULES...
+</div>
+ 
+
+</section>
+
+</main>
+
+<footer class="site-footer">
+
+ 
+<p>
+    UNDERTALE: OUTERHAVEN OFFICIAL
+</p>
+
+
+<p class="footer-small">
+    A fan-made project created by the Outerhaven community.
+</p>
+
+
+<div class="site-credit">
+
+    <span>
+        CREATED BY
+    </span>
+
+    <strong>
+        Solid Snake
+    </strong>
+
+    <small>
+        (worldofgatlan_42179)
+    </small>
+
+
+    <strong>
+        SF
+    </strong>
+
+    <small>
+        (sf_9002)
+    </small>
+
+
+    <strong>
+        COOLSKELETON95
+    </strong>
+
+    <small>
+        (coolskeleton95_j)
+    </small>
+
+</div>
+ 
+
+</footer>
+
+<script src="supabase.js"></script>
+
+<script>
+
+async function loadRules() {
+
+    const rulesList =
+        document.getElementById("rules-list");
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("rules")
+
+        .select("*")
+
+        .order("id", {
+            ascending: true
+        });
+
+
+    if (error) {
+
+        console.error(
+            "ERROR LOADING RULES:",
+            error
+        );
+
+
+        rulesList.innerHTML = `
+
+            <div class="empty-message">
+                UNABLE TO LOAD RULES.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    if (!data || data.length === 0) {
+
+        rulesList.innerHTML = `
+
+            <div class="empty-message">
+                NO RULES YET.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    rulesList.innerHTML = data.map(
+        (rule, index) => `
+
+        <div class="rule">
+
+            <span>
+                ${String(index + 1).padStart(2, "0")}
+            </span>
+
+            <div>
+
+                <h2>
+                    ${escapeHTML(rule.title)}
+                </h2>
+
+                <p>
+                    ${escapeHTML(rule.description)}
+                </p>
+
+            </div>
+
+        </div>
+
+    `
+    ).join("");
+
+}
+
+
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+loadRules();
+
+</script>
+
+</body>
+
+</html>

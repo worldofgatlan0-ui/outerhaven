@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Login - UNDERTALE: OUTERHAVEN OFFICIAL</title>
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+    .auth-page {
+        min-height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 70px 20px;
+    }
+
+    .auth-box {
+        width: 100%;
+        max-width: 450px;
+        background: #111118;
+        border: 1px solid #292934;
+        padding: 35px;
+        box-sizing: border-box;
+    }
+
+    .auth-box h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .auth-box h1 span {
+        color: #bdbdcc;
+    }
+
+    .auth-subtitle {
+        color: #9999a6;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .auth-field {
+        margin-bottom: 18px;
+    }
+
+    .auth-field label {
+        display: block;
+        color: #9999a6;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 7px;
+    }
+
+    .auth-field input {
+        width: 100%;
+        padding: 13px;
+        background: #0b0b0f;
+        color: #ffffff;
+        border: 1px solid #292934;
+        font-family: "Space Mono", monospace;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .auth-field input:focus {
+        border-color: #ffffff;
+    }
+
+    .auth-buttons {
+        display: flex;
+        margin-top: 25px;
+    }
+
+    .auth-buttons button {
+        width: 100%;
+    }
+
+    .auth-buttons button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .auth-message {
+        display: none;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #555563;
+        color: #ffffff;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .auth-message.visible {
+        display: block;
+    }
+
+    .auth-switch {
+        text-align: center;
+        margin-top: 25px;
+        color: #666672;
+        font-size: 11px;
+    }
+
+    .auth-switch button {
+        background: none;
+        border: none;
+        color: #ffffff;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .auth-admin {
+        text-align: center;
+        margin-top: 18px;
+        padding-top: 15px;
+        border-top: 1px solid #1d1d25;
+    }
+
+    .auth-admin a {
+        color: #666672;
+        font-size: 10px;
+        text-decoration: none;
+        letter-spacing: 1px;
+    }
+
+    .auth-admin a:hover {
+        color: #ffffff;
+    }
+
+    @media (max-width: 500px) {
+
+        .auth-box {
+            padding: 25px;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+```
+<div class="header-content">
+
+    <div class="logo">
+
+        <span class="logo-main">
+            OUTERHAVEN
+        </span>
+
+        <span class="logo-sub">
+            UNDERTALE FAN PROJECT
+        </span>
+
+    </div>
+
+
+    <nav class="navigation">
+
+        <a href="index.html">
+            HOME
+        </a>
+
+        <a href="rules.html">
+            RULES
+        </a>
+
+        <a href="teams.html">
+            OUR TEAM
+        </a>
+
+        <a href="projects.html">
+            OUR PROJECTS
+        </a>
+
+        <a href="store.html">
+            STORE
+        </a>
+
+        <a href="login.html" class="active">
+            LOGIN
+        </a>
+
+    </nav>
+
+</div>
+```
+
+</header>
+
+<main>
+
+<section class="auth-page">
+
+```
+<div class="auth-box">
+
+    <p
+        class="eyebrow"
+        id="auth-eyebrow"
+    >
+        MEMBER ACCESS
+    </p>
+
+
+    <h1 id="auth-title">
+        LOG <span>IN</span>
+    </h1>
+
+
+    <p
+        class="auth-subtitle"
+        id="auth-subtitle"
+    >
+        Log in to your Outerhaven account.
+    </p>
+
+
+    <div
+        id="auth-message"
+        class="auth-message"
+    ></div>
+
+
+    <form id="auth-form">
+
+
+        <div class="auth-field">
+
+            <label for="email">
+                EMAIL
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                autocomplete="email"
+                required
+            >
+
+        </div>
+
+
+        <div class="auth-field">
+
+            <label for="password">
+                PASSWORD
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                autocomplete="current-password"
+                required
+            >
+
+        </div>
+
+
+        <div class="auth-buttons">
+
+            <button
+                type="submit"
+                class="button primary"
+                id="submit-button"
+            >
+                LOG IN
+            </button>
+
+        </div>
+
+
+    </form>
+
+
+    <div class="auth-switch">
+
+        <span id="switch-text">
+            Don't have an account?
+        </span>
+
+        <button
+            type="button"
+            id="switch-button"
+        >
+            SIGN UP
+        </button>
+
+    </div>
+
+
+    <div class="auth-admin">
+
+        <a href="admin.html">
+            Admin?
+        </a>
+
+    </div>
+
+
+</div>
+```
+
+</section>
+
+</main>
+
+<footer class="site-footer">
+
+```
+<p>
+    UNDERTALE: OUTERHAVEN OFFICIAL
+</p>
+
+<p class="footer-small">
+    A fan-made project created by the Outerhaven community.
+</p>
+```
+
+</footer>
+
+<script src="supabase.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const authForm =
+        document.getElementById("auth-form");
+
+    const emailInput =
+        document.getElementById("email");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const submitButton =
+        document.getElementById("submit-button");
+
+    const switchButton =
+        document.getElementById("switch-button");
+
+    const switchText =
+        document.getElementById("switch-text");
+
+    const authTitle =
+        document.getElementById("auth-title");
+
+    const authEyebrow =
+        document.getElementById("auth-eyebrow");
+
+    const authSubtitle =
+        document.getElementById("auth-subtitle");
+
+    const messageBox =
+        document.getElementById("auth-message");
+
+
+    let isSignUp = false;
+
+
+    // ============================================
+    // MESSAGE
+    // ============================================
+
+    function showMessage(message) {
+
+        messageBox.textContent = message;
+
+        messageBox.classList.add("visible");
+
+    }
+
+
+    function hideMessage() {
+
+        messageBox.textContent = "";
+
+        messageBox.classList.remove("visible");
+
+    }
+
+
+    // ============================================
+    // LOGIN / SIGN UP SWITCH
+    // ============================================
+
+    switchButton.addEventListener(
+        "click",
+        () => {
+
+            isSignUp = !isSignUp;
+
+            hideMessage();
+
+            passwordInput.value = "";
+
+
+            if (isSignUp) {
+
+                authEyebrow.textContent =
+                    "CREATE ACCOUNT";
+
+                authTitle.innerHTML =
+                    'SIGN <span>UP</span>';
+
+                authSubtitle.textContent =
+                    "Create an Outerhaven account.";
+
+                submitButton.textContent =
+                    "SIGN UP";
+
+                switchText.textContent =
+                    "Already have an account?";
+
+                switchButton.textContent =
+                    "LOG IN";
+
+            } else {
+
+                authEyebrow.textContent =
+                    "MEMBER ACCESS";
+
+                authTitle.innerHTML =
+                    'LOG <span>IN</span>';
+
+                authSubtitle.textContent =
+                    "Log in to your Outerhaven account.";
+
+                submitButton.textContent =
+                    "LOG IN";
+
+                switchText.textContent =
+                    "Don't have an account?";
+
+                switchButton.textContent =
+                    "SIGN UP";
+
+            }
+
+        }
+    );
+
+
+    // ============================================
+    // SUBMIT
+    // ============================================
+
+    authForm.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
+
+            hideMessage();
+
+
+            const email =
+                emailInput.value.trim();
+
+            const password =
+                passwordInput.value;
+
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                isSignUp
+                    ? "CREATING..."
+                    : "LOGGING IN...";
+
+
+            try {
+
+                if (isSignUp) {
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient.auth.signUp({
+                            email: email,
+                            password: password
+                        });
+
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    if (data.session) {
+
+                        showMessage(
+                            "ACCOUNT CREATED. REDIRECTING..."
+                        );
+
+
+                        setTimeout(() => {
+
+                            window.location.href =
+                                "store.html";
+
+                        }, 700);
+
+
+                        return;
+                    }
+
+
+                    showMessage(
+                        "ACCOUNT CREATED. CHECK YOUR EMAIL IF CONFIRMATION IS REQUIRED."
+                    );
+
+
+                } else {
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient.auth.signInWithPassword({
+                            email: email,
+                            password: password
+                        });
+
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    if (data.session) {
+
+                        showMessage(
+                            "LOGIN SUCCESSFUL. REDIRECTING..."
+                        );
+
+
+                        setTimeout(() => {
+
+                            window.location.href =
+                                "store.html";
+
+                        }, 700);
+
+
+                        return;
+                    }
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "AUTH ERROR:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    "Something went wrong."
+                );
+
+
+            } finally {
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    isSignUp
+                        ? "SIGN UP"
+                        : "LOG IN";
+
+            }
+
+        }
+    );
+
+});
+
+</script>
+
+</body>
+
+</html>

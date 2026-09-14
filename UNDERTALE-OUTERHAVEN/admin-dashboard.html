@@ -1,0 +1,2880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Outerhaven Admin Dashboard</title>
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+    .admin-dashboard {
+        max-width: 1200px;
+        margin: auto;
+        padding: 70px 30px 110px;
+    }
+
+    .admin-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 50px;
+    }
+
+    .admin-top h1 {
+        font-size: clamp(36px, 6vw, 60px);
+        line-height: 1;
+    }
+
+    .admin-top h1 span {
+        color: #bdbdcc;
+    }
+
+    .admin-section {
+        margin-bottom: 70px;
+    }
+
+    .admin-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .admin-section-header h2 {
+        font-size: 25px;
+    }
+
+    .admin-card {
+        background: #111118;
+        border: 1px solid #292934;
+        padding: 25px;
+        margin-bottom: 15px;
+    }
+
+    .admin-card-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .admin-card h3 {
+        font-size: 19px;
+        margin-bottom: 7px;
+    }
+
+    .admin-card p {
+        color: #9999a6;
+        font-size: 14px;
+    }
+
+    .admin-status {
+        color: #666672;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
+
+    .admin-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .admin-button {
+        background: transparent;
+        color: #ffffff;
+        border: 1px solid #555563;
+        padding: 9px 13px;
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        cursor: pointer;
+    }
+
+    .admin-button:hover {
+        border-color: #ffffff;
+    }
+
+    .admin-button.delete:hover {
+        border-color: #999999;
+    }
+
+    .admin-form {
+        display: none;
+        background: #0e0e14;
+        border: 1px solid #292934;
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+
+    .admin-form.visible {
+        display: block;
+    }
+
+    .admin-form h3 {
+        margin-bottom: 20px;
+    }
+
+    .admin-field {
+        margin-bottom: 18px;
+    }
+
+    .admin-field label {
+        display: block;
+        color: #9999a6;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 7px;
+    }
+
+    .admin-field input,
+    .admin-field textarea,
+    .admin-field select {
+        width: 100%;
+        padding: 12px;
+        background: #0b0b0f;
+        color: #ffffff;
+        border: 1px solid #292934;
+        font-family: "Space Mono", monospace;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .admin-field textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .admin-field input:focus,
+    .admin-field textarea:focus,
+    .admin-field select:focus {
+        border-color: #ffffff;
+    }
+
+    .admin-field input[type="file"] {
+        padding: 10px;
+    }
+
+    .admin-form-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+
+    .empty-message {
+        color: #666672;
+        border: 1px dashed #292934;
+        padding: 25px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .admin-message {
+        display: none;
+        padding: 12px;
+        margin-bottom: 25px;
+        border: 1px solid #555563;
+        color: #ffffff;
+        font-size: 12px;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+    .admin-message.error {
+        border-color: #888888;
+    }
+
+    .store-image-preview {
+        display: none;
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border: 1px solid #292934;
+        margin-top: 15px;
+    }
+
+    .store-card-image {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border: 1px solid #292934;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    @media (max-width: 700px) {
+
+        .admin-dashboard {
+            padding: 45px 18px 80px;
+        }
+
+        .admin-top,
+        .admin-section-header,
+        .admin-card-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .admin-section-header .button {
+            width: 100%;
+        }
+
+        .admin-form {
+            padding: 18px;
+        }
+
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="header-content">
+
+        <div class="logo">
+
+            <span class="logo-main">
+                OUTERHAVEN
+            </span>
+
+            <span class="logo-sub">
+                ADMINISTRATION
+            </span>
+
+        </div>
+
+        <nav class="navigation">
+
+            <a href="index.html">
+                SITE
+            </a>
+
+            <a href="#" id="logout-button">
+                LOG OUT
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<main>
+
+<div class="admin-dashboard">
+
+    <div class="admin-top">
+
+        <div>
+
+            <p class="eyebrow">
+                CONTROL CENTER
+            </p>
+
+            <h1>
+                ADMIN <span>PANEL</span>
+            </h1>
+
+        </div>
+
+    </div>
+
+    <div
+        id="admin-message"
+        class="admin-message"
+    ></div>
+
+
+    <!-- ========================================= -->
+    <!-- PROJECTS -->
+    <!-- ========================================= -->
+
+    <section class="admin-section">
+
+        <div class="admin-section-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    CONTENT
+                </p>
+
+                <h2>
+                    PROJECTS
+                </h2>
+
+            </div>
+
+            <button
+                class="button primary"
+                id="new-project-button"
+                type="button"
+            >
+                + NEW PROJECT
+            </button>
+
+        </div>
+
+        <form
+            id="project-form"
+            class="admin-form"
+        >
+
+            <h3 id="project-form-title">
+                NEW PROJECT
+            </h3>
+
+            <input
+                type="hidden"
+                id="project-id"
+            >
+
+            <div class="admin-field">
+
+                <label for="project-title">
+                    PROJECT NAME
+                </label>
+
+                <input
+                    type="text"
+                    id="project-title"
+                    required
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="project-status">
+                    STATUS
+                </label>
+
+                <select id="project-status">
+
+                    <option value="IN DEVELOPMENT">
+                        IN DEVELOPMENT
+                    </option>
+
+                    <option value="PLANNED">
+                        PLANNED
+                    </option>
+
+                    <option value="COMPLETED">
+                        COMPLETED
+                    </option>
+
+                    <option value="ON HOLD">
+                        ON HOLD
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="project-description">
+                    DESCRIPTION
+                </label>
+
+                <textarea
+                    id="project-description"
+                    required
+                ></textarea>
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="project-link">
+                    PROJECT LINK
+                </label>
+
+                <input
+                    type="text"
+                    id="project-link"
+                    value="#"
+                >
+
+            </div>
+
+            <div class="admin-form-buttons">
+
+                <button
+                    type="submit"
+                    class="button primary"
+                >
+                    SAVE PROJECT
+                </button>
+
+                <button
+                    type="button"
+                    class="admin-button"
+                    id="cancel-project"
+                >
+                    CANCEL
+                </button>
+
+            </div>
+
+        </form>
+
+        <div id="projects-list"></div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- TEAM -->
+    <!-- ========================================= -->
+
+    <section class="admin-section">
+
+        <div class="admin-section-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    PEOPLE
+                </p>
+
+                <h2>
+                    TEAM MEMBERS
+                </h2>
+
+            </div>
+
+            <button
+                class="button primary"
+                id="new-team-button"
+                type="button"
+            >
+                + NEW MEMBER
+            </button>
+
+        </div>
+
+        <form
+            id="team-form"
+            class="admin-form"
+        >
+
+            <h3 id="team-form-title">
+                NEW TEAM MEMBER
+            </h3>
+
+            <input
+                type="hidden"
+                id="team-id"
+            >
+
+            <div class="admin-field">
+
+                <label for="team-name">
+                    NAME
+                </label>
+
+                <input
+                    type="text"
+                    id="team-name"
+                    required
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="team-role">
+                    ROLE / POSITION
+                </label>
+
+                <input
+                    type="text"
+                    id="team-role"
+                    required
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="team-description">
+                    DESCRIPTION
+                </label>
+
+                <textarea
+                    id="team-description"
+                    required
+                ></textarea>
+
+            </div>
+
+            <div class="admin-form-buttons">
+
+                <button
+                    type="submit"
+                    class="button primary"
+                >
+                    SAVE MEMBER
+                </button>
+
+                <button
+                    type="button"
+                    class="admin-button"
+                    id="cancel-team"
+                >
+                    CANCEL
+                </button>
+
+            </div>
+
+        </form>
+
+        <div id="team-list"></div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- RULES -->
+    <!-- ========================================= -->
+
+    <section class="admin-section">
+
+        <div class="admin-section-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    COMMUNITY
+                </p>
+
+                <h2>
+                    SERVER RULES
+                </h2>
+
+            </div>
+
+            <button
+                class="button primary"
+                id="new-rule-button"
+                type="button"
+            >
+                + NEW RULE
+            </button>
+
+        </div>
+
+        <form
+            id="rule-form"
+            class="admin-form"
+        >
+
+            <h3 id="rule-form-title">
+                NEW RULE
+            </h3>
+
+            <input
+                type="hidden"
+                id="rule-id"
+            >
+
+            <div class="admin-field">
+
+                <label for="rule-title">
+                    RULE TITLE
+                </label>
+
+                <input
+                    type="text"
+                    id="rule-title"
+                    placeholder="BE RESPECTFUL"
+                    required
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="rule-description">
+                    DESCRIPTION
+                </label>
+
+                <textarea
+                    id="rule-description"
+                    placeholder="Explain the rule..."
+                    required
+                ></textarea>
+
+            </div>
+
+            <div class="admin-form-buttons">
+
+                <button
+                    type="submit"
+                    class="button primary"
+                >
+                    SAVE RULE
+                </button>
+
+                <button
+                    type="button"
+                    class="admin-button"
+                    id="cancel-rule"
+                >
+                    CANCEL
+                </button>
+
+            </div>
+
+        </form>
+
+        <div id="rules-list"></div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- STORE -->
+    <!-- ========================================= -->
+
+    <section class="admin-section">
+
+        <div class="admin-section-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    SHOP
+                </p>
+
+                <h2>
+                    STORE ITEMS
+                </h2>
+
+            </div>
+
+            <button
+                class="button primary"
+                id="new-store-button"
+                type="button"
+            >
+                + NEW ITEM
+            </button>
+
+        </div>
+
+        <form
+            id="store-form"
+            class="admin-form"
+        >
+
+            <h3 id="store-form-title">
+                NEW STORE ITEM
+            </h3>
+
+            <input
+                type="hidden"
+                id="store-id"
+            >
+
+            <div class="admin-field">
+
+                <label for="store-name">
+                    ITEM NAME
+                </label>
+
+                <input
+                    type="text"
+                    id="store-name"
+                    required
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="store-price">
+                    PRICE
+                </label>
+
+                <input
+                    type="text"
+                    id="store-price"
+                    placeholder="$10.00"
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="store-description">
+                    DESCRIPTION
+                </label>
+
+                <textarea
+                    id="store-description"
+                    required
+                ></textarea>
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="store-image-file">
+                    ITEM IMAGE
+                </label>
+
+                <input
+                    type="file"
+                    id="store-image-file"
+                    accept="image/png,image/jpeg,image/webp"
+                >
+
+                <small
+                    style="
+                        color:#666672;
+                        display:block;
+                        margin-top:8px;
+                    "
+                >
+                    PNG, JPG, or WEBP — maximum 5 MB
+                </small>
+
+                <img
+                    id="store-image-preview"
+                    class="store-image-preview"
+                    alt="Image preview"
+                >
+
+            </div>
+
+            <input
+                type="hidden"
+                id="store-image"
+            >
+
+            <div class="admin-field">
+
+                <label for="store-link">
+                    ITEM LINK
+                </label>
+
+                <input
+                    type="text"
+                    id="store-link"
+                    value="#"
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="store-available">
+                    AVAILABILITY
+                </label>
+
+                <select id="store-available">
+
+                    <option value="false">
+                        NOT AVAILABLE
+                    </option>
+
+                    <option value="true">
+                        AVAILABLE
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="admin-form-buttons">
+
+                <button
+                    type="submit"
+                    class="button primary"
+                >
+                    SAVE ITEM
+                </button>
+
+                <button
+                    type="button"
+                    class="admin-button"
+                    id="cancel-store"
+                >
+                    CANCEL
+                </button>
+
+            </div>
+
+        </form>
+
+        <div id="store-list"></div>
+
+    </section>
+
+</div>
+
+</main>
+
+<footer class="site-footer">
+
+    <p>
+        UNDERTALE: OUTERHAVEN OFFICIAL
+    </p>
+
+    <p class="footer-small">
+        A fan-made project created by the Outerhaven community.
+    </p>
+
+</footer>
+
+<script src="supabase.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ============================================
+    // ELEMENTS
+    // ============================================
+
+    const projectForm =
+        document.getElementById("project-form");
+
+    const teamForm =
+        document.getElementById("team-form");
+
+    const ruleForm =
+        document.getElementById("rule-form");
+
+    const storeForm =
+        document.getElementById("store-form");
+
+    const projectsList =
+        document.getElementById("projects-list");
+
+    const teamList =
+        document.getElementById("team-list");
+
+    const rulesList =
+        document.getElementById("rules-list");
+
+    const storeList =
+        document.getElementById("store-list");
+
+    const messageBox =
+        document.getElementById("admin-message");
+
+    const storeImageFile =
+        document.getElementById("store-image-file");
+
+    const storeImagePreview =
+        document.getElementById("store-image-preview");
+
+
+    // ============================================
+    // REQUIRED ELEMENT CHECK
+    // ============================================
+
+    if (
+        !projectForm ||
+        !teamForm ||
+        !ruleForm ||
+        !storeForm ||
+        !projectsList ||
+        !teamList ||
+        !rulesList ||
+        !storeList
+    ) {
+
+        console.error(
+            "ADMIN DASHBOARD ERROR: Required HTML elements are missing."
+        );
+
+        return;
+    }
+
+
+    // ============================================
+    // MESSAGE
+    // ============================================
+
+    function showMessage(message, isError = false) {
+
+        if (!messageBox) return;
+
+        messageBox.textContent = message;
+
+        messageBox.classList.toggle(
+            "error",
+            isError
+        );
+
+        messageBox.style.display = "block";
+
+        clearTimeout(showMessage.timeout);
+
+        showMessage.timeout =
+            setTimeout(() => {
+
+                messageBox.style.display = "none";
+
+            }, 5000);
+    }
+
+
+    // ============================================
+    // SECURITY
+    // ============================================
+
+    async function checkLogin() {
+
+        try {
+
+            if (
+                typeof supabaseClient === "undefined"
+            ) {
+
+                showMessage(
+                    "SUPABASE CLIENT IS NOT LOADED.",
+                    true
+                );
+
+                return false;
+            }
+
+            const {
+                data: { session },
+                error
+            } =
+                await supabaseClient.auth.getSession();
+
+            if (error) {
+
+                console.error(
+                    "SESSION ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "LOGIN CHECK FAILED: " +
+                    error.message,
+                    true
+                );
+
+                return false;
+            }
+
+            if (!session) {
+
+                window.location.href =
+                    "admin.html";
+
+                return false;
+            }
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "LOGIN CHECK ERROR:",
+                error
+            );
+
+            showMessage(
+                "LOGIN CHECK FAILED: " +
+                error.message,
+                true
+            );
+
+            return false;
+        }
+    }
+
+
+    // ============================================
+    // PROJECTS
+    // ============================================
+
+    async function loadProjects() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("projects")
+                .select("*")
+                .order("id", {
+                    ascending: true
+                });
+
+        if (error) {
+
+            console.error(
+                "PROJECT LOAD ERROR:",
+                error
+            );
+
+            showMessage(
+                "ERROR LOADING PROJECTS: " +
+                error.message,
+                true
+            );
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            projectsList.innerHTML =
+                '<div class="empty-message">NO PROJECTS YET.</div>';
+
+            return;
+        }
+
+        projectsList.innerHTML =
+            data.map(project => `
+
+                <article class="admin-card">
+
+                    <div class="admin-card-header">
+
+                        <div>
+
+                            <div class="admin-status">
+                                ${escapeHTML(project.status)}
+                            </div>
+
+                            <h3>
+                                ${escapeHTML(project.title)}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(project.description)}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="admin-actions">
+
+                        <button
+                            class="admin-button"
+                            onclick="editProject(${Number(project.id)})"
+                        >
+                            EDIT
+                        </button>
+
+                        <button
+                            class="admin-button delete"
+                            onclick="deleteProject(${Number(project.id)})"
+                        >
+                            DELETE
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `).join("");
+    }
+
+
+    document.getElementById("new-project-button")
+        ?.addEventListener("click", () => {
+
+            projectForm.reset();
+
+            document.getElementById("project-id").value = "";
+
+            document.getElementById("project-link").value = "#";
+
+            document.getElementById("project-form-title")
+                .textContent = "NEW PROJECT";
+
+            projectForm.classList.add("visible");
+
+            projectForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        });
+
+
+    document.getElementById("cancel-project")
+        ?.addEventListener("click", () => {
+
+            projectForm.classList.remove("visible");
+
+        });
+
+
+    projectForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const id =
+                document.getElementById(
+                    "project-id"
+                ).value;
+
+            const project = {
+
+                title:
+                    document.getElementById(
+                        "project-title"
+                    ).value.trim(),
+
+                description:
+                    document.getElementById(
+                        "project-description"
+                    ).value.trim(),
+
+                link:
+                    document.getElementById(
+                        "project-link"
+                    ).value.trim() || "#",
+
+                status:
+                    document.getElementById(
+                        "project-status"
+                    ).value
+            };
+
+            if (
+                !project.title ||
+                !project.description
+            ) {
+
+                showMessage(
+                    "PROJECT NAME AND DESCRIPTION ARE REQUIRED.",
+                    true
+                );
+
+                return;
+            }
+
+            let result;
+
+            if (id) {
+
+                result =
+                    await supabaseClient
+                        .from("projects")
+                        .update(project)
+                        .eq("id", id);
+
+            } else {
+
+                result =
+                    await supabaseClient
+                        .from("projects")
+                        .insert(project);
+            }
+
+            if (result.error) {
+
+                console.error(
+                    "PROJECT SAVE ERROR:",
+                    result.error
+                );
+
+                showMessage(
+                    "ERROR SAVING PROJECT: " +
+                    result.error.message,
+                    true
+                );
+
+                return;
+            }
+
+            showMessage(
+                "PROJECT SAVED."
+            );
+
+            projectForm.classList.remove(
+                "visible"
+            );
+
+            await loadProjects();
+
+        }
+    );
+
+
+    window.editProject =
+        async function(id) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("projects")
+                    .select("*")
+                    .eq("id", id)
+                    .single();
+
+            if (error) {
+
+                console.error(
+                    "PROJECT EDIT ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            document.getElementById(
+                "project-id"
+            ).value = data.id;
+
+            document.getElementById(
+                "project-title"
+            ).value = data.title || "";
+
+            document.getElementById(
+                "project-description"
+            ).value = data.description || "";
+
+            document.getElementById(
+                "project-link"
+            ).value = data.link || "#";
+
+            document.getElementById(
+                "project-status"
+            ).value =
+                data.status || "IN DEVELOPMENT";
+
+            document.getElementById(
+                "project-form-title"
+            ).textContent =
+                "EDIT PROJECT";
+
+            projectForm.classList.add(
+                "visible"
+            );
+
+            projectForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        };
+
+
+    window.deleteProject =
+        async function(id) {
+
+            if (
+                !confirm(
+                    "DELETE THIS PROJECT?"
+                )
+            ) {
+                return;
+            }
+
+            const { error } =
+                await supabaseClient
+                    .from("projects")
+                    .delete()
+                    .eq("id", id);
+
+            if (error) {
+
+                console.error(
+                    "PROJECT DELETE ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR DELETING PROJECT: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            showMessage(
+                "PROJECT DELETED."
+            );
+
+            await loadProjects();
+
+        };
+
+
+    // ============================================
+    // TEAM
+    // ============================================
+
+    async function loadTeam() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("team_members")
+                .select("*")
+                .order("id", {
+                    ascending: true
+                });
+
+        if (error) {
+
+            console.error(
+                "TEAM LOAD ERROR:",
+                error
+            );
+
+            showMessage(
+                "ERROR LOADING TEAM: " +
+                error.message,
+                true
+            );
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            teamList.innerHTML =
+                '<div class="empty-message">NO TEAM MEMBERS YET.</div>';
+
+            return;
+        }
+
+        teamList.innerHTML =
+            data.map(member => `
+
+                <article class="admin-card">
+
+                    <div class="admin-card-header">
+
+                        <div>
+
+                            <div class="admin-status">
+                                ${escapeHTML(member.role)}
+                            </div>
+
+                            <h3>
+                                ${escapeHTML(member.name)}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(member.description)}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="admin-actions">
+
+                        <button
+                            class="admin-button"
+                            onclick="editTeamMember(${Number(member.id)})"
+                        >
+                            EDIT
+                        </button>
+
+                        <button
+                            class="admin-button delete"
+                            onclick="deleteTeamMember(${Number(member.id)})"
+                        >
+                            DELETE
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `).join("");
+    }
+
+
+    document.getElementById("new-team-button")
+        ?.addEventListener("click", () => {
+
+            teamForm.reset();
+
+            document.getElementById("team-id").value = "";
+
+            document.getElementById("team-form-title")
+                .textContent = "NEW TEAM MEMBER";
+
+            teamForm.classList.add("visible");
+
+            teamForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        });
+
+
+    document.getElementById("cancel-team")
+        ?.addEventListener("click", () => {
+
+            teamForm.classList.remove("visible");
+
+        });
+
+
+    teamForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const id =
+                document.getElementById(
+                    "team-id"
+                ).value;
+
+            const member = {
+
+                name:
+                    document.getElementById(
+                        "team-name"
+                    ).value.trim(),
+
+                role:
+                    document.getElementById(
+                        "team-role"
+                    ).value.trim(),
+
+                description:
+                    document.getElementById(
+                        "team-description"
+                    ).value.trim()
+            };
+
+            if (
+                !member.name ||
+                !member.role ||
+                !member.description
+            ) {
+
+                showMessage(
+                    "NAME, ROLE, AND DESCRIPTION ARE REQUIRED.",
+                    true
+                );
+
+                return;
+            }
+
+            let result;
+
+            if (id) {
+
+                result =
+                    await supabaseClient
+                        .from("team_members")
+                        .update(member)
+                        .eq("id", id);
+
+            } else {
+
+                result =
+                    await supabaseClient
+                        .from("team_members")
+                        .insert(member);
+            }
+
+            if (result.error) {
+
+                console.error(
+                    "TEAM SAVE ERROR:",
+                    result.error
+                );
+
+                showMessage(
+                    "ERROR SAVING MEMBER: " +
+                    result.error.message,
+                    true
+                );
+
+                return;
+            }
+
+            showMessage(
+                "TEAM MEMBER SAVED."
+            );
+
+            teamForm.classList.remove(
+                "visible"
+            );
+
+            await loadTeam();
+
+        }
+    );
+
+
+    window.editTeamMember =
+        async function(id) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("team_members")
+                    .select("*")
+                    .eq("id", id)
+                    .single();
+
+            if (error) {
+
+                console.error(
+                    "TEAM EDIT ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            document.getElementById(
+                "team-id"
+            ).value = data.id;
+
+            document.getElementById(
+                "team-name"
+            ).value = data.name || "";
+
+            document.getElementById(
+                "team-role"
+            ).value = data.role || "";
+
+            document.getElementById(
+                "team-description"
+            ).value =
+                data.description || "";
+
+            document.getElementById(
+                "team-form-title"
+            ).textContent =
+                "EDIT TEAM MEMBER";
+
+            teamForm.classList.add(
+                "visible"
+            );
+
+            teamForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        };
+
+
+    window.deleteTeamMember =
+        async function(id) {
+
+            if (
+                !confirm(
+                    "DELETE THIS TEAM MEMBER?"
+                )
+            ) {
+                return;
+            }
+
+            const { error } =
+                await supabaseClient
+                    .from("team_members")
+                    .delete()
+                    .eq("id", id);
+
+            if (error) {
+
+                console.error(
+                    "TEAM DELETE ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR DELETING TEAM MEMBER: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            showMessage(
+                "TEAM MEMBER DELETED."
+            );
+
+            await loadTeam();
+
+        };
+
+
+    // ============================================
+    // RULES
+    // ============================================
+
+    async function loadRules() {
+
+        console.log(
+            "Loading rules..."
+        );
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("rules")
+                .select("*")
+                .order("rule_number", {
+                    ascending: true
+                });
+
+        if (error) {
+
+            console.error(
+                "RULE LOAD ERROR:",
+                error
+            );
+
+            showMessage(
+                "ERROR LOADING RULES: " +
+                error.message,
+                true
+            );
+
+            return;
+        }
+
+        console.log(
+            "Rules loaded:",
+            data
+        );
+
+        if (!data || data.length === 0) {
+
+            rulesList.innerHTML =
+                '<div class="empty-message">NO RULES YET.</div>';
+
+            return;
+        }
+
+        rulesList.innerHTML =
+            data.map(rule => `
+
+                <article class="admin-card">
+
+                    <div class="admin-card-header">
+
+                        <div>
+
+                            <div class="admin-status">
+                                RULE ${String(
+                                    Number(rule.rule_number)
+                                ).padStart(2, "0")}
+                            </div>
+
+                            <h3>
+                                ${escapeHTML(
+                                    rule.title
+                                )}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(
+                                    rule.description
+                                )}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="admin-actions">
+
+                        <button
+                            class="admin-button"
+                            onclick="editRule(${Number(rule.id)})"
+                        >
+                            EDIT
+                        </button>
+
+                        <button
+                            class="admin-button delete"
+                            onclick="deleteRule(${Number(rule.id)})"
+                        >
+                            DELETE
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `).join("");
+    }
+
+
+    // NEW RULE
+
+    document.getElementById("new-rule-button")
+        ?.addEventListener("click", () => {
+
+            ruleForm.reset();
+
+            document.getElementById(
+                "rule-id"
+            ).value = "";
+
+            document.getElementById(
+                "rule-form-title"
+            ).textContent = "NEW RULE";
+
+            ruleForm.classList.add(
+                "visible"
+            );
+
+            ruleForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        });
+
+
+    // CANCEL RULE
+
+    document.getElementById("cancel-rule")
+        ?.addEventListener("click", () => {
+
+            ruleForm.classList.remove(
+                "visible"
+            );
+
+        });
+
+
+    // SAVE RULE
+
+    ruleForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            console.log(
+                "SAVE RULE clicked."
+            );
+
+            const id =
+                document.getElementById(
+                    "rule-id"
+                ).value;
+
+            const title =
+                document.getElementById(
+                    "rule-title"
+                ).value.trim();
+
+            const description =
+                document.getElementById(
+                    "rule-description"
+                ).value.trim();
+
+
+            // VALIDATION
+
+            if (!title) {
+
+                showMessage(
+                    "RULE TITLE IS REQUIRED.",
+                    true
+                );
+
+                return;
+            }
+
+            if (!description) {
+
+                showMessage(
+                    "RULE DESCRIPTION IS REQUIRED.",
+                    true
+                );
+
+                return;
+            }
+
+
+            // ========================================
+            // EDIT EXISTING RULE
+            // ========================================
+
+            if (id) {
+
+                console.log(
+                    "Updating rule:",
+                    id
+                );
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("rules")
+                        .update({
+                            title:
+                                title,
+
+                            description:
+                                description
+                        })
+                        .eq("id", id);
+
+                if (error) {
+
+                    console.error(
+                        "SUPABASE RULE UPDATE ERROR:",
+                        error
+                    );
+
+                    showMessage(
+                        "ERROR UPDATING RULE: " +
+                        error.message,
+                        true
+                    );
+
+                    return;
+                }
+
+            }
+
+
+            // ========================================
+            // CREATE NEW RULE
+            // ========================================
+
+            else {
+
+                console.log(
+                    "Getting next rule number..."
+                );
+
+
+                const {
+                    data: existingRules,
+                    error: numberError
+                } =
+                    await supabaseClient
+                        .from("rules")
+                        .select("rule_number")
+                        .order("rule_number", {
+                            ascending: false
+                        })
+                        .limit(1);
+
+
+                if (numberError) {
+
+                    console.error(
+                        "RULE NUMBER ERROR:",
+                        numberError
+                    );
+
+                    showMessage(
+                        "ERROR GETTING RULE NUMBER: " +
+                        numberError.message,
+                        true
+                    );
+
+                    return;
+                }
+
+
+                let nextRuleNumber = 1;
+
+
+                if (
+                    existingRules &&
+                    existingRules.length > 0 &&
+                    existingRules[0].rule_number != null
+                ) {
+
+                    nextRuleNumber =
+                        Number(
+                            existingRules[0].rule_number
+                        ) + 1;
+                }
+
+
+                console.log(
+                    "Creating rule number:",
+                    nextRuleNumber
+                );
+
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("rules")
+                        .insert({
+
+                            rule_number:
+                                nextRuleNumber,
+
+                            title:
+                                title,
+
+                            description:
+                                description
+
+                        });
+
+
+                if (error) {
+
+                    console.error(
+                        "SUPABASE RULE INSERT ERROR:",
+                        error
+                    );
+
+                    showMessage(
+                        "ERROR SAVING RULE: " +
+                        error.message,
+                        true
+                    );
+
+                    return;
+                }
+
+            }
+
+
+            // ========================================
+            // SUCCESS
+            // ========================================
+
+            console.log(
+                "Rule saved successfully."
+            );
+
+            showMessage(
+                "RULE SAVED."
+            );
+
+            ruleForm.reset();
+
+            document.getElementById(
+                "rule-id"
+            ).value = "";
+
+            document.getElementById(
+                "rule-form-title"
+            ).textContent =
+                "NEW RULE";
+
+            ruleForm.classList.remove(
+                "visible"
+            );
+
+            await loadRules();
+
+        }
+    );
+
+
+    // EDIT RULE
+
+    window.editRule =
+        async function(id) {
+
+            console.log(
+                "Editing rule:",
+                id
+            );
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("rules")
+                    .select("*")
+                    .eq("id", id)
+                    .single();
+
+            if (error) {
+
+                console.error(
+                    "RULE EDIT ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR LOADING RULE: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            document.getElementById(
+                "rule-id"
+            ).value = data.id;
+
+            document.getElementById(
+                "rule-title"
+            ).value =
+                data.title || "";
+
+            document.getElementById(
+                "rule-description"
+            ).value =
+                data.description || "";
+
+            document.getElementById(
+                "rule-form-title"
+            ).textContent =
+                "EDIT RULE";
+
+            ruleForm.classList.add(
+                "visible"
+            );
+
+            ruleForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        };
+
+
+    // DELETE RULE
+
+    window.deleteRule =
+        async function(id) {
+
+            if (
+                !confirm(
+                    "DELETE THIS RULE?"
+                )
+            ) {
+                return;
+            }
+
+            console.log(
+                "Deleting rule:",
+                id
+            );
+
+            const { error } =
+                await supabaseClient
+                    .from("rules")
+                    .delete()
+                    .eq("id", id);
+
+            if (error) {
+
+                console.error(
+                    "RULE DELETE ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR DELETING RULE: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            showMessage(
+                "RULE DELETED."
+            );
+
+            await loadRules();
+
+        };
+
+
+    // ============================================
+    // STORE
+    // ============================================
+
+    async function loadStore() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("store_items")
+                .select("*")
+                .order("id", {
+                    ascending: true
+                });
+
+        if (error) {
+
+            console.error(
+                "STORE LOAD ERROR:",
+                error
+            );
+
+            showMessage(
+                "ERROR LOADING STORE: " +
+                error.message,
+                true
+            );
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            storeList.innerHTML =
+                '<div class="empty-message">NO STORE ITEMS YET.</div>';
+
+            return;
+        }
+
+        storeList.innerHTML =
+            data.map(item => `
+
+                <article class="admin-card">
+
+                    <div class="admin-card-header">
+
+                        <div>
+
+                            <div class="admin-status">
+                                ${
+                                    item.available
+                                        ? "AVAILABLE"
+                                        : "NOT AVAILABLE"
+                                }
+                            </div>
+
+                            ${
+                                item.image
+                                    ? `
+                                        <img
+                                            class="store-card-image"
+                                            src="${escapeHTML(
+                                                item.image
+                                            )}"
+                                            alt="${escapeHTML(
+                                                item.name
+                                            )}"
+                                        >
+                                    `
+                                    : ""
+                            }
+
+                            <h3>
+                                ${escapeHTML(
+                                    item.name
+                                )}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(
+                                    item.price
+                                )}
+                            </p>
+
+                            <p>
+                                ${escapeHTML(
+                                    item.description
+                                )}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="admin-actions">
+
+                        <button
+                            class="admin-button"
+                            onclick="editStoreItem(${Number(item.id)})"
+                        >
+                            EDIT
+                        </button>
+
+                        <button
+                            class="admin-button delete"
+                            onclick="deleteStoreItem(${Number(item.id)})"
+                        >
+                            DELETE
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `).join("");
+    }
+
+
+    // NEW STORE ITEM
+
+    document.getElementById("new-store-button")
+        ?.addEventListener("click", () => {
+
+            storeForm.reset();
+
+            document.getElementById(
+                "store-id"
+            ).value = "";
+
+            document.getElementById(
+                "store-image"
+            ).value = "";
+
+            document.getElementById(
+                "store-image-file"
+            ).value = "";
+
+            document.getElementById(
+                "store-link"
+            ).value = "#";
+
+            storeImagePreview.style.display =
+                "none";
+
+            storeImagePreview.src = "";
+
+            document.getElementById(
+                "store-form-title"
+            ).textContent =
+                "NEW STORE ITEM";
+
+            storeForm.classList.add(
+                "visible"
+            );
+
+            storeForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        });
+
+
+    // IMAGE PREVIEW
+
+    storeImageFile?.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                storeImageFile.files[0];
+
+            if (!file) {
+
+                storeImagePreview.style.display =
+                    "none";
+
+                storeImagePreview.src = "";
+
+                return;
+            }
+
+            const allowedTypes = [
+                "image/png",
+                "image/jpeg",
+                "image/webp"
+            ];
+
+            if (
+                !allowedTypes.includes(
+                    file.type
+                )
+            ) {
+
+                showMessage(
+                    "INVALID IMAGE TYPE. USE PNG, JPG, OR WEBP.",
+                    true
+                );
+
+                storeImageFile.value = "";
+
+                return;
+            }
+
+            if (
+                file.size >
+                5 * 1024 * 1024
+            ) {
+
+                showMessage(
+                    "IMAGE TOO LARGE. MAXIMUM SIZE IS 5 MB.",
+                    true
+                );
+
+                storeImageFile.value = "";
+
+                return;
+            }
+
+            const previewURL =
+                URL.createObjectURL(file);
+
+            storeImagePreview.src =
+                previewURL;
+
+            storeImagePreview.style.display =
+                "block";
+
+        }
+    );
+
+
+    // CANCEL STORE
+
+    document.getElementById("cancel-store")
+        ?.addEventListener("click", () => {
+
+            storeForm.classList.remove(
+                "visible"
+            );
+
+        });
+
+
+    // SAVE STORE ITEM
+
+    storeForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const id =
+                document.getElementById(
+                    "store-id"
+                ).value;
+
+            const imageFile =
+                document.getElementById(
+                    "store-image-file"
+                ).files[0];
+
+            let imageURL =
+                document.getElementById(
+                    "store-image"
+                ).value;
+
+
+            // IMAGE VALIDATION
+
+            if (imageFile) {
+
+                const allowedTypes = [
+                    "image/png",
+                    "image/jpeg",
+                    "image/webp"
+                ];
+
+                if (
+                    !allowedTypes.includes(
+                        imageFile.type
+                    )
+                ) {
+
+                    showMessage(
+                        "INVALID IMAGE TYPE. USE PNG, JPG, OR WEBP.",
+                        true
+                    );
+
+                    return;
+                }
+
+                if (
+                    imageFile.size >
+                    5 * 1024 * 1024
+                ) {
+
+                    showMessage(
+                        "IMAGE TOO LARGE. MAXIMUM SIZE IS 5 MB.",
+                        true
+                    );
+
+                    return;
+                }
+
+
+                // SAFE RANDOM FILE NAME
+
+                const extension =
+                    imageFile.name
+                        .split(".")
+                        .pop()
+                        .toLowerCase();
+
+                const randomID =
+                    typeof crypto !== "undefined" &&
+                    typeof crypto.randomUUID === "function"
+                        ? crypto.randomUUID()
+                        : Date.now() +
+                          "-" +
+                          Math.random()
+                              .toString(36)
+                              .slice(2);
+
+                const fileName =
+                    randomID +
+                    "." +
+                    extension;
+
+                const filePath =
+                    "store/" +
+                    fileName;
+
+
+                showMessage(
+                    "UPLOADING IMAGE..."
+                );
+
+
+                const {
+                    error: uploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("store-images")
+                        .upload(
+                            filePath,
+                            imageFile,
+                            {
+                                cacheControl:
+                                    "3600",
+
+                                upsert:
+                                    false,
+
+                                contentType:
+                                    imageFile.type
+                            }
+                        );
+
+
+                if (uploadError) {
+
+                    console.error(
+                        "IMAGE UPLOAD ERROR:",
+                        uploadError
+                    );
+
+                    showMessage(
+                        "ERROR UPLOADING IMAGE: " +
+                        uploadError.message,
+                        true
+                    );
+
+                    return;
+                }
+
+
+                const {
+                    data:
+                        publicURLData
+                } =
+                    supabaseClient
+                        .storage
+                        .from(
+                            "store-images"
+                        )
+                        .getPublicUrl(
+                            filePath
+                        );
+
+
+                imageURL =
+                    publicURLData.publicUrl;
+            }
+
+
+            const item = {
+
+                name:
+                    document.getElementById(
+                        "store-name"
+                    ).value.trim(),
+
+                price:
+                    document.getElementById(
+                        "store-price"
+                    ).value.trim(),
+
+                description:
+                    document.getElementById(
+                        "store-description"
+                    ).value.trim(),
+
+                image:
+                    imageURL,
+
+                link:
+                    document.getElementById(
+                        "store-link"
+                    ).value.trim() || "#",
+
+                available:
+                    document.getElementById(
+                        "store-available"
+                    ).value === "true"
+
+            };
+
+
+            if (
+                !item.name ||
+                !item.description
+            ) {
+
+                showMessage(
+                    "ITEM NAME AND DESCRIPTION ARE REQUIRED.",
+                    true
+                );
+
+                return;
+            }
+
+
+            let result;
+
+
+            if (id) {
+
+                result =
+                    await supabaseClient
+                        .from("store_items")
+                        .update(item)
+                        .eq("id", id);
+
+            } else {
+
+                result =
+                    await supabaseClient
+                        .from("store_items")
+                        .insert(item);
+
+            }
+
+
+            if (result.error) {
+
+                console.error(
+                    "STORE SAVE ERROR:",
+                    result.error
+                );
+
+                showMessage(
+                    "ERROR SAVING STORE ITEM: " +
+                    result.error.message,
+                    true
+                );
+
+                return;
+            }
+
+
+            showMessage(
+                "STORE ITEM SAVED."
+            );
+
+            storeForm.classList.remove(
+                "visible"
+            );
+
+            document.getElementById(
+                "store-image-file"
+            ).value = "";
+
+            storeImagePreview.style.display =
+                "none";
+
+            storeImagePreview.src = "";
+
+            await loadStore();
+
+        }
+    );
+
+
+    // EDIT STORE ITEM
+
+    window.editStoreItem =
+        async function(id) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("store_items")
+                    .select("*")
+                    .eq("id", id)
+                    .single();
+
+            if (error) {
+
+                console.error(
+                    "STORE EDIT ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            document.getElementById(
+                "store-id"
+            ).value = data.id;
+
+            document.getElementById(
+                "store-name"
+            ).value =
+                data.name || "";
+
+            document.getElementById(
+                "store-price"
+            ).value =
+                data.price || "";
+
+            document.getElementById(
+                "store-description"
+            ).value =
+                data.description || "";
+
+            document.getElementById(
+                "store-image"
+            ).value =
+                data.image || "";
+
+            document.getElementById(
+                "store-link"
+            ).value =
+                data.link || "#";
+
+            document.getElementById(
+                "store-available"
+            ).value =
+                data.available
+                    ? "true"
+                    : "false";
+
+            document.getElementById(
+                "store-image-file"
+            ).value = "";
+
+
+            if (data.image) {
+
+                storeImagePreview.src =
+                    data.image;
+
+                storeImagePreview.style.display =
+                    "block";
+
+            } else {
+
+                storeImagePreview.src = "";
+
+                storeImagePreview.style.display =
+                    "none";
+            }
+
+
+            document.getElementById(
+                "store-form-title"
+            ).textContent =
+                "EDIT STORE ITEM";
+
+            storeForm.classList.add(
+                "visible"
+            );
+
+            storeForm.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        };
+
+
+    // DELETE STORE ITEM
+
+    window.deleteStoreItem =
+        async function(id) {
+
+            if (
+                !confirm(
+                    "DELETE THIS STORE ITEM?"
+                )
+            ) {
+                return;
+            }
+
+            const { error } =
+                await supabaseClient
+                    .from("store_items")
+                    .delete()
+                    .eq("id", id);
+
+            if (error) {
+
+                console.error(
+                    "STORE DELETE ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "ERROR DELETING STORE ITEM: " +
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+            showMessage(
+                "STORE ITEM DELETED."
+            );
+
+            await loadStore();
+
+        };
+
+
+    // ============================================
+    // HTML ESCAPING
+    // ============================================
+
+    function escapeHTML(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+    }
+
+
+    // ============================================
+    // LOG OUT
+    // ============================================
+
+    document.getElementById(
+        "logout-button"
+    )?.addEventListener(
+        "click",
+        async event => {
+
+            event.preventDefault();
+
+            try {
+
+                await supabaseClient.auth.signOut();
+
+            } catch (error) {
+
+                console.error(
+                    "LOGOUT ERROR:",
+                    error
+                );
+
+            }
+
+            window.location.href =
+                "admin.html";
+
+        }
+    );
+
+
+    // ============================================
+    // START DASHBOARD
+    // ============================================
+
+    async function startDashboard() {
+
+        console.log(
+            "Starting Outerhaven admin dashboard..."
+        );
+
+        const loggedIn =
+            await checkLogin();
+
+        if (!loggedIn) return;
+
+        await loadProjects();
+        await loadTeam();
+        await loadRules();
+        await loadStore();
+
+        console.log(
+            "Admin dashboard loaded."
+        );
+    }
+
+
+    startDashboard();
+
+});
+
+</script>
+
+</body>
+</html>
