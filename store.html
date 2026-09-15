@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,140 +7,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
- 
-<title>Store - UNDERTALE: OUTERHAVEN OFFICIAL</title>
+    <title>Store - UNDERTALE: OUTERHAVEN OFFICIAL</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
-    .store-container {
-        max-width: 1200px;
-        margin: auto;
-        padding: 60px 30px 100px;
-    }
-
-    .store-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px;
-    }
-
-    .store-card {
-        background: #111118;
-        border: 1px solid #292934;
-        overflow: hidden;
-        transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .store-card:hover {
-        transform: translateY(-3px);
-        border-color: #555563;
-    }
-
-    .store-image {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        display: block;
-        background: #0b0b0f;
-    }
-
-    .store-no-image {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #0b0b0f;
-        color: #666672;
-        font-size: 40px;
-    }
-
-    .store-card-content {
-        padding: 22px;
-    }
-
-    .store-status {
-        color: #666672;
-        font-size: 10px;
-        font-weight: bold;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-    }
-
-    .store-card h2 {
-        font-size: 21px;
-        margin-bottom: 8px;
-    }
-
-    .store-price {
-        color: #ffffff;
-        font-size: 17px;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .store-description {
-        color: #9999a6;
-        font-size: 13px;
-        line-height: 1.6;
-        margin-bottom: 20px;
-    }
-
-    .store-button {
-        display: inline-block;
-        text-decoration: none;
-    }
-
-    .store-unavailable {
-        display: inline-block;
-        color: #666672;
-        border: 1px solid #292934;
-        padding: 10px 14px;
-        font-size: 10px;
-        font-weight: bold;
-        letter-spacing: 1px;
-    }
-
-    .store-loading,
-    .store-error,
-    .store-empty {
-        text-align: center;
-        padding: 50px 25px;
-        border: 1px dashed #292934;
-        color: #666672;
-    }
-
-    .store-empty .store-symbol {
-        font-size: 45px;
-        margin-bottom: 15px;
-    }
-
-    .store-empty h2 {
-        color: #ffffff;
-        margin-bottom: 10px;
-    }
-
-    .store-empty p {
-        max-width: 500px;
-        margin: 0 auto 25px;
-        line-height: 1.6;
-    }
-
-    @media (max-width: 700px) {
+    <style>
         .store-container {
-            padding-left: 20px;
-            padding-right: 20px;
+            max-width: 1200px;
+            margin: auto;
+            padding: 60px 30px 100px;
         }
 
         .store-grid {
-            grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
         }
-    }
-</style>
- 
+
+        .store-card {
+            background: #111118;
+            border: 1px solid #292934;
+            overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .store-card:hover {
+            transform: translateY(-3px);
+            border-color: #555563;
+        }
+
+        .store-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+            background: #0b0b0f;
+        }
+
+        .store-no-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0b0b0f;
+            color: #666672;
+            font-size: 40px;
+        }
+
+        .store-card-content {
+            padding: 22px;
+        }
+
+        .store-status {
+            color: #666672;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .store-card h2 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .store-price {
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .store-description {
+            color: #9999a6;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .store-button {
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .store-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .store-unavailable {
+            display: inline-block;
+            color: #666672;
+            border: 1px solid #292934;
+            padding: 10px 14px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .store-loading,
+        .store-error,
+        .store-empty {
+            text-align: center;
+            padding: 50px 25px;
+            border: 1px dashed #292934;
+            color: #666672;
+        }
+
+        .store-empty .store-symbol {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .store-empty h2 {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .store-empty p {
+            max-width: 500px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 700px) {
+            .store-container {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .store-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 
 </head>
 
@@ -147,15 +153,14 @@
 
 <header class="site-header">
 
- 
-<div class="header-content">
+    <div class="header-content">
 
-    <div class="logo">
-        <span class="logo-main">OUTERHAVEN</span>
-        <span class="logo-sub">UNDERTALE FAN PROJECT</span>
-    </div>
-    
-<nav class="navigation">
+        <div class="logo">
+            <span class="logo-main">OUTERHAVEN</span>
+            <span class="logo-sub">UNDERTALE FAN PROJECT</span>
+        </div>
+
+        <nav class="navigation">
             <a href="index.html" class="active">HOME</a>
             <a href="rules.html">RULES</a>
             <a href="teams.html">OUR TEAM</a>
@@ -164,8 +169,7 @@
             <a href="login.html">LOGIN</a>
         </nav>
 
-</div>
- 
+    </div>
 
 </header>
 
@@ -173,31 +177,27 @@
 
 <section class="page-hero">
 
- 
-<p class="eyebrow">SHOP</p>
+    <p class="eyebrow">SHOP</p>
 
-<h1>
-    OUTERHAVEN <span>STORE</span>
-</h1>
+    <h1>
+        OUTERHAVEN <span>STORE</span>
+    </h1>
 
-<p>
-    Official Outerhaven items and community goodies.
-</p>
- 
+    <p>
+        Official Outerhaven items and community goodies.
+    </p>
 
 </section>
 
 <section class="store-container">
 
- 
-<div id="store-content">
+    <div id="store-content">
 
-    <div class="store-loading">
-        LOADING STORE...
+        <div class="store-loading">
+            LOADING STORE...
+        </div>
+
     </div>
-
-</div>
- 
 
 </section>
 
@@ -205,34 +205,112 @@
 
 <footer class="site-footer">
 
- 
-<p>UNDERTALE: OUTERHAVEN OFFICIAL</p>
+    <p>UNDERTALE: OUTERHAVEN OFFICIAL</p>
 
-<p class="footer-small">
-    A fan-made project created by the Outerhaven community.
-</p>
+    <p class="footer-small">
+        A fan-made project created by the Outerhaven community.
+    </p>
 
-<div class="site-credit">
+    <div class="site-credit">
 
-    <span>CREATED BY</span>
+        <span>CREATED BY</span>
 
-    <strong>Solid Snake</strong>
-    <small>(worldofgatlan_42179)</small>
+        <strong>Solid Snake</strong>
+        <small>(worldofgatlan_42179)</small>
 
-    <strong>SF</strong>
-    <small>(sf_9002)</small>
+        <strong>SF</strong>
+        <small>(sf_9002)</small>
 
-    <strong>COOLSKELETON95</strong>
-    <small>(coolskeleton95_j)</small>
+        <strong>COOLSKELETON95</strong>
+        <small>(coolskeleton95_j)</small>
 
-</div>
- 
+    </div>
 
 </footer>
 
 <script src="supabase.js"></script>
 
 <script>
+
+const CHECKOUT_FUNCTION_URL =
+    `${SUPABASE_URL}/functions/v1/create-checkout`;
+
+
+async function buyItem(priceId, button) {
+
+    if (!priceId) {
+
+        alert("This item is not connected to Stripe yet.");
+
+        return;
+    }
+
+
+    if (button) {
+
+        button.disabled = true;
+        button.textContent = "LOADING...";
+
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient.functions.invoke(
+            "create-checkout",
+            {
+                body: {
+                    priceId: priceId
+                }
+            }
+        );
+
+
+        if (error) {
+
+            console.error("CHECKOUT ERROR:", error);
+
+            throw new Error(
+                "Could not start checkout."
+            );
+
+        }
+
+
+        if (!data || !data.url) {
+
+            throw new Error(
+                "Stripe did not return a checkout URL."
+            );
+
+        }
+
+
+        window.location.href = data.url;
+
+    } catch (error) {
+
+        console.error("CHECKOUT ERROR:", error);
+
+        alert(
+            "Sorry! We couldn't start the checkout. Please try again."
+        );
+
+
+        if (button) {
+
+            button.disabled = false;
+            button.textContent = "BUY NOW";
+
+        }
+
+    }
+
+}
+
 
 async function loadStore() {
 
@@ -356,14 +434,17 @@ async function loadStore() {
 
 
                         ${
-                            item.available && item.link && item.link !== "#"
+                            item.available && item.stripe_price_id
                             ? `
-                                <a
-                                    href="${escapeHTML(item.link)}"
+                                <button
                                     class="button primary store-button"
+                                    onclick="buyItem(
+                                        '${escapeHTML(item.stripe_price_id)}',
+                                        this
+                                    )"
                                 >
-                                    VIEW ITEM
-                                </a>
+                                    BUY NOW
+                                </button>
                             `
                             : `
                                 <span class="store-unavailable">
@@ -402,3 +483,4 @@ loadStore();
 
 </body>
 </html>
+```
