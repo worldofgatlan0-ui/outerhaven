@@ -1,201 +1,158 @@
-```html
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Store - UNDERTALE: OUTERHAVEN OFFICIAL</title>
+    <title>Admin Login - UNDERTALE: OUTERHAVEN</title>
 
     <link rel="stylesheet" href="style.css">
 
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        .store-container {
-            max-width: 1200px;
+        .admin-login {
+            max-width: 500px;
             margin: auto;
-            padding: 60px 30px 100px;
+            padding: 120px 30px;
         }
 
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .store-card {
+        .admin-box {
             background: #111118;
             border: 1px solid #292934;
-            overflow: hidden;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            padding: 35px;
         }
 
-        .store-card:hover {
-            transform: translateY(-3px);
-            border-color: #555563;
-        }
-
-        .store-image {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            display: block;
-            background: #0b0b0f;
-        }
-
-        .store-no-image {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #0b0b0f;
-            color: #666672;
-            font-size: 40px;
-        }
-
-        .store-card-content {
-            padding: 22px;
-        }
-
-        .store-status {
-            color: #666672;
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 2px;
+        .admin-box h1 {
+            font-size: 32px;
             margin-bottom: 10px;
         }
 
-        .store-card h2 {
-            font-size: 21px;
-            margin-bottom: 8px;
-        }
-
-        .store-price {
-            color: #ffffff;
-            font-size: 17px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .store-description {
+        .admin-box > p {
             color: #9999a6;
-            font-size: 13px;
-            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .admin-field {
             margin-bottom: 20px;
         }
 
-        .store-button {
-            display: inline-block;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-        }
-
-        .store-button:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        .store-unavailable {
-            display: inline-block;
-            color: #666672;
-            border: 1px solid #292934;
-            padding: 10px 14px;
-            font-size: 10px;
+        .admin-field label {
+            display: block;
+            color: #9999a6;
+            font-size: 11px;
             font-weight: bold;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
         }
 
-        .store-loading,
-        .store-error,
-        .store-empty {
-            text-align: center;
-            padding: 50px 25px;
-            border: 1px dashed #292934;
-            color: #666672;
-        }
-
-        .store-empty .store-symbol {
-            font-size: 45px;
-            margin-bottom: 15px;
-        }
-
-        .store-empty h2 {
+        .admin-field input {
+            width: 100%;
+            padding: 13px;
+            background: #0b0b0f;
             color: #ffffff;
-            margin-bottom: 10px;
+            border: 1px solid #292934;
+            font-family: "Space Mono", monospace;
+            outline: none;
         }
 
-        .store-empty p {
-            max-width: 500px;
-            margin: 0 auto 25px;
-            line-height: 1.6;
+        .admin-field input:focus {
+            border-color: #ffffff;
         }
 
-        @media (max-width: 700px) {
-            .store-container {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
+        .admin-login-button {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
 
-            .store-grid {
-                grid-template-columns: 1fr;
-            }
+        .admin-error {
+            display: none;
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #555563;
+            color: #ffffff;
+            font-size: 12px;
         }
     </style>
-
 </head>
 
 <body>
 
 <header class="site-header">
-
     <div class="header-content">
 
         <div class="logo">
             <span class="logo-main">OUTERHAVEN</span>
-            <span class="logo-sub">UNDERTALE FAN PROJECT</span>
+            <span class="logo-sub">ADMINISTRATION</span>
         </div>
 
         <nav class="navigation">
-            <a href="index.html" class="active">HOME</a>
-            <a href="rules.html">RULES</a>
-            <a href="teams.html">OUR TEAM</a>
-            <a href="projects.html">OUR PROJECTS</a>
-            <a href="store.html">STORE</a>
-            <a href="login.html">LOGIN</a>
+            <a href="index.html">RETURN HOME</a>
         </nav>
 
     </div>
-
 </header>
 
 <main>
 
-<section class="page-hero">
+<section class="admin-login">
 
-    <p class="eyebrow">SHOP</p>
+    <div class="admin-box">
 
-    <h1>
-        OUTERHAVEN <span>STORE</span>
-    </h1>
+        <p class="eyebrow">RESTRICTED ACCESS</p>
 
-    <p>
-        Official Outerhaven items and community goodies.
-    </p>
+        <h1>ADMIN LOGIN</h1>
 
-</section>
+        <p>
+            Sign in to manage the Outerhaven website.
+        </p>
 
-<section class="store-container">
+        <form id="login-form">
 
-    <div id="store-content">
+            <div class="admin-field">
 
-        <div class="store-loading">
-            LOADING STORE...
-        </div>
+                <label for="email">EMAIL</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                    autocomplete="username"
+                >
+
+            </div>
+
+            <div class="admin-field">
+
+                <label for="password">PASSWORD</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    required
+                    autocomplete="current-password"
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="button primary admin-login-button"
+            >
+                LOG IN
+            </button>
+
+        </form>
+
+        <div
+            id="login-error"
+            class="admin-error"
+        ></div>
 
     </div>
 
@@ -211,276 +168,11 @@
         A fan-made project created by the Outerhaven community.
     </p>
 
-    <div class="site-credit">
-
-        <span>CREATED BY</span>
-
-        <strong>Solid Snake</strong>
-        <small>(worldofgatlan_42179)</small>
-
-        <strong>SF</strong>
-        <small>(sf_9002)</small>
-
-        <strong>COOLSKELETON95</strong>
-        <small>(coolskeleton95_j)</small>
-
-    </div>
-
 </footer>
 
 <script src="supabase.js"></script>
-
-<script>
-
-const CHECKOUT_FUNCTION_URL =
-    `${SUPABASE_URL}/functions/v1/create-checkout`;
-
-
-async function buyItem(priceId, button) {
-
-    if (!priceId) {
-
-        alert("This item is not connected to Stripe yet.");
-
-        return;
-    }
-
-
-    if (button) {
-
-        button.disabled = true;
-        button.textContent = "LOADING...";
-
-    }
-
-
-    try {
-
-        const {
-            data,
-            error
-        } = await supabaseClient.functions.invoke(
-            "create-checkout",
-            {
-                body: {
-                    priceId: priceId
-                }
-            }
-        );
-
-
-        if (error) {
-
-            console.error("CHECKOUT ERROR:", error);
-
-            throw new Error(
-                "Could not start checkout."
-            );
-
-        }
-
-
-        if (!data || !data.url) {
-
-            throw new Error(
-                "Stripe did not return a checkout URL."
-            );
-
-        }
-
-
-        window.location.href = data.url;
-
-    } catch (error) {
-
-        console.error("CHECKOUT ERROR:", error);
-
-        alert(
-            "Sorry! We couldn't start the checkout. Please try again."
-        );
-
-
-        if (button) {
-
-            button.disabled = false;
-            button.textContent = "BUY NOW";
-
-        }
-
-    }
-
-}
-
-
-async function loadStore() {
-
-    const storeContent =
-        document.getElementById("store-content");
-
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("store_items")
-        .select("*")
-        .order("id", { ascending: true });
-
-
-    if (error) {
-
-        console.error("STORE ERROR:", error);
-
-        storeContent.innerHTML = `
-            <div class="store-error">
-                <h2>STORE UNAVAILABLE</h2>
-                <p>
-                    We couldn't load the store right now.
-                    Please try again later.
-                </p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-        storeContent.innerHTML = `
-
-            <div class="store-empty">
-
-                <div class="store-symbol">+</div>
-
-                <h2>NOTHING HERE YET</h2>
-
-                <p>
-                    We're working on something cool.
-                    Check back later for new Outerhaven items.
-                </p>
-
-                <a
-                    href="index.html"
-                    class="button secondary"
-                >
-                    RETURN HOME
-                </a>
-
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    storeContent.innerHTML = `
-
-        <div class="store-grid">
-
-            ${data.map(item => `
-
-                <article class="store-card">
-
-                    ${
-                        item.image
-                        ? `
-                            <img
-                                class="store-image"
-                                src="${escapeHTML(item.image)}"
-                                alt="${escapeHTML(item.name)}"
-                                loading="lazy"
-                            >
-                        `
-                        : `
-                            <div class="store-no-image">
-                                +
-                            </div>
-                        `
-                    }
-
-
-                    <div class="store-card-content">
-
-                        <div class="store-status">
-                            ${
-                                item.available
-                                ? "AVAILABLE"
-                                : "NOT AVAILABLE"
-                            }
-                        </div>
-
-
-                        <h2>
-                            ${escapeHTML(item.name)}
-                        </h2>
-
-
-                        ${
-                            item.price
-                            ? `
-                                <div class="store-price">
-                                    ${escapeHTML(item.price)}
-                                </div>
-                            `
-                            : ""
-                        }
-
-
-                        <p class="store-description">
-                            ${escapeHTML(item.description)}
-                        </p>
-
-
-                        ${
-                            item.available && item.stripe_price_id
-                            ? `
-                                <button
-                                    class="button primary store-button"
-                                    onclick="buyItem(
-                                        '${escapeHTML(item.stripe_price_id)}',
-                                        this
-                                    )"
-                                >
-                                    BUY NOW
-                                </button>
-                            `
-                            : `
-                                <span class="store-unavailable">
-                                    NOT AVAILABLE
-                                </span>
-                            `
-                        }
-
-                    </div>
-
-                </article>
-
-            `).join("")}
-
-        </div>
-
-    `;
-}
-
-
-function escapeHTML(value) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        value ?? "";
-
-    return div.innerHTML;
-}
-
-
-loadStore();
-
-</script>
+<script src="admin.js"></script>
 
 </body>
 </html>
-```
+
